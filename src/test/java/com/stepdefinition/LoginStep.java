@@ -1,17 +1,21 @@
 package com.stepdefinition;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
 
 import com.base.BaseClass;
 import com.endpoints.Endpoints;
+import com.pojo.Category;
 import com.pojo.Get_Output;
 import com.pojo.IdInput;
 import com.pojo.IdOutput;
+import com.pojo.PetCreationInput;
 import com.pojo.Post_Input;
 import com.pojo.Post_Output;
+import com.pojo.Tag;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -27,19 +31,21 @@ public class LoginStep extends BaseClass {
 	@Given("User add header")
 	public void userAddHeader() {
 
-		// addHeader("accept", "application/json");
+		 addHeader("accept", "application/json");
 
 	}
 
 	@When("User send {string} request for login endpoint")
 	public void userSendRequestForLoginEndpoint(String get) {
-		// response = requestMethodType(get, Endpoints.GETUSERNAME);
+		 response = requestMethodType(get, Endpoints.GETUSERNAME);
 
 	}
 
 	@Then("User verify the login response body first_name present as {string}")
 	public void userVerifyTheLoginResponseBodyFirstNamePresentAs(String string) {
 		Get_Output getOutput = response.as(Get_Output.class);
+String asPrettyString = response.asPrettyString();
+System.out.println(asPrettyString);
 		String firstName = getOutput.getFirstName();
 		System.out.println(firstName);
 		Assert.assertEquals("name", string, firstName);
@@ -68,7 +74,7 @@ public class LoginStep extends BaseClass {
 
 	@When("User send {string} request for create endpoint")
 	public void userSendRequestForCreateEndpoint(String post) {
-		response = requestMethodType(post, Endpoints.POSTINPUT);
+		// response = requestMethodType(post, Endpoints.POSTINPUT);
 
 	}
 
@@ -94,23 +100,37 @@ public class LoginStep extends BaseClass {
 		response = requestMethodType(post, Endpoints.POSTORDER);
 
 	}
-	
 
 	@Then("User verify the message orderplaced {string}")
 	public void userVerifyTheMessageOrderplaced(String expected) {
-		
+
 		IdOutput idOutput = response.as(IdOutput.class);
-		
+
 		String quantity = idOutput.getQuantity();
-		
+
 		Assert.assertEquals("verify", expected, quantity);
-		
-		
-		
-	    
+
 	}
 
+	@When("User add request bodys {string}, {string}, {string},{string}, {string}, {string} , {string} , {string} and {string}")
+	public void userAddRequestBodysAnd(String id, String categoryid, String categoryname, String name, String photo,
+			String tags, String status, String tagid, String tagname) {
 
+		Category category = new Category(Integer.valueOf(categoryid), categoryname);
+		Tag tag = new Tag(Integer.valueOf(tagid), tagname);
+		PetCreationInput petCreationInput = new PetCreationInput(Integer.valueOf(id), category, name,
+				Arrays.asList(photo), Arrays.asList(tag), status);
+		addBodyObject(petCreationInput);
+	}
 
+	@When("User send {string} request for pet creation")
+	public void userSendRequestForPetCreation(String post) {
+		response = requestMethodType(post, Endpoints.NEWPET);
+	}
+
+	@Then("User verify the message")
+	public void userVerifyTheMessage() {
+
+	}
 
 }

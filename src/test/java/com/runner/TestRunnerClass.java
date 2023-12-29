@@ -21,7 +21,7 @@ import io.cucumber.junit.CucumberOptions.SnippetType;
  *
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(tags=("@kkk") ,dryRun=false,publish=true,monochrome=true,snippets=SnippetType.CAMELCASE,stepNotifications=true,
+@CucumberOptions(tags=("@test") ,dryRun=false,publish=true,monochrome=true,snippets=SnippetType.CAMELCASE,stepNotifications=true,
 plugin= {"pretty","json:target\\output.json"},features="src\\test\\resources\\Features",glue="com.stepdefinition")
 public class TestRunnerClass extends BaseClass {
 	
